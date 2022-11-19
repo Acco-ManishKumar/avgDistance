@@ -12,6 +12,20 @@ class pair{
         return this.Value;
     }
 }
+import java.util.ArrayList;
+class pair{
+    Integer Key, Value;
+    public pair(Integer destination, Integer weight) {
+        this.Key = destination;
+        this.Value = weight;
+    }
+    Integer Key(){
+        return this.Key;
+    }
+    Integer Value(){
+        return this.Value;
+    }
+}
 class createGraph {
     ArrayList<ArrayList<pair>> graph = new ArrayList<>();
     int vertices;
@@ -25,6 +39,10 @@ class createGraph {
         Integer intSource = source - 'A';
         Integer intDestination = destination - 'A';
         this.graph.get(intSource).add(new pair(intDestination, weight));
+        ///remove next three for directed graph
+        Integer intUndirectedSource = destination - 'A';
+        Integer intUndirectedDestination = source - 'A';
+        this.graph.get(intUndirectedSource).add(new pair(intUndirectedDestination, weight));
     }
 }
 
@@ -46,27 +64,40 @@ public class Graph {
         Integer destination = Y.charAt(0) - 'A';
         ArrayList<ArrayList<pair>> totalPath = new ArrayList<ArrayList<pair>>();
         ArrayList<pair> path = new ArrayList<pair>();
-        dfs(givenGraph, totalPath, path, source, destination, 0 );
+        ArrayList<Integer> visted = new ArrayList<>();
+        for(int i = 0; i < givenGraph.vertices; i++){
+            visted.add(0);
+        }
+        dfs(givenGraph, visted, totalPath, path, source, destination, 0 );
         int pathCount = totalPath.size();
         int distance = 0;
-        for(ArrayList<pair> it: totalPath){
-            for(pair it1 : it) {
-                distance += it1.Value();
+        for(ArrayList<pair> Path: totalPath){
+            for(pair Edge : Path) {
+                distance += Edge.Value();
             }
         }
         double averageDistance = (double)distance /pathCount;
         System.out.println(averageDistance);
     }
-    private static void dfs(createGraph givenGraph, ArrayList<ArrayList<pair>> totalPath, ArrayList<pair> path, Integer source, Integer destination, Integer weight) {
+    private static void dfs(createGraph givenGraph,ArrayList<Integer> visted, ArrayList<ArrayList<pair>> totalPath, ArrayList<pair> path, Integer source, Integer destination, Integer weight) {
+        visted.set(source, 1);
         path.add(new pair(source, weight));
         if(source.equals(destination)){
+            for (pair p : path){
+                System.out.print(p.Key + " ");
+            }
+            System.out.println();
             totalPath.add(new ArrayList<pair>(path));
         }
         for(pair p : givenGraph.graph.get(source)){
-            int newSource = p.Key;
-            int newWeight = p.Value;
-            dfs(givenGraph, totalPath, path, newSource, destination, newWeight);
+            if(visted.get(p.Key).equals(0)){
+                int newSource = p.Key;
+                int newWeight = p.Value;
+                dfs(givenGraph, visted, totalPath, path, newSource, destination, newWeight);
+            }
+
         }
+        visted.set(source, 0);
         path.remove(path.size() - 1);
     }
 }
