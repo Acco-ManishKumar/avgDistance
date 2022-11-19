@@ -1,18 +1,6 @@
 import java.util.ArrayList;
-class pair{
-    Integer Key, Value;
-    public pair(Integer destination, Integer weight) {
-        this.Key = destination;
-        this.Value = weight;
-    }
-    Integer Key(){
-        return this.Key;
-    }
-    Integer Value(){
-        return this.Value;
-    }
-}
-import java.util.ArrayList;
+import java.util.Scanner;
+
 class pair{
     Integer Key, Value;
     public pair(Integer destination, Integer weight) {
@@ -48,7 +36,15 @@ class createGraph {
 
 public class Graph {
     public static void main(String[] args) {
-        calculateAverageDistanceBetweenTwoPoints("A",  "C");
+        System.out.print("First source node : ");
+
+        Scanner input1 = new Scanner(System.in);
+        String x = input1.next().toUpperCase();
+        System.out.print("Enter destination node : ");
+        Scanner input2 = new Scanner(System.in);
+        String y = input2.next().toUpperCase();
+
+        calculateAverageDistanceBetweenTwoPoints(x,y);
     }
     public static void calculateAverageDistanceBetweenTwoPoints(String X, String Y){
         Integer vertices = 5;
@@ -77,16 +73,16 @@ public class Graph {
             }
         }
         double averageDistance = (double)distance /pathCount;
-        System.out.println(averageDistance);
+        System.out.println("Average disstance between "+X+" and "+Y+" is :"+averageDistance);
     }
-    private static void dfs(createGraph givenGraph,ArrayList<Integer> visted, ArrayList<ArrayList<pair>> totalPath, ArrayList<pair> path, Integer source, Integer destination, Integer weight) {
+    private static void dfs(createGraph givenGraph, ArrayList<Integer> visted, ArrayList<ArrayList<pair>> totalPath, ArrayList<pair> path, Integer source, Integer destination, Integer weight) {
         visted.set(source, 1);
         path.add(new pair(source, weight));
         if(source.equals(destination)){
-            for (pair p : path){
-                System.out.print(p.Key + " ");
-            }
-            System.out.println();
+//            for (pair p : path){
+//                System.out.print(p.Key + " ");
+//            }
+//            System.out.println();
             totalPath.add(new ArrayList<pair>(path));
         }
         for(pair p : givenGraph.graph.get(source)){
